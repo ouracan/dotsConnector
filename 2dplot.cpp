@@ -1,6 +1,3 @@
-#ifdef __APPLE__
-/* Defined before OpenGL and GLUT includes to avoid deprecation messages */
-#define GL_SILENCE_DEPRECATION
 
 
 #include <GLFW/glfw3.h>
@@ -8,8 +5,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
-#endif
 
 
 const int WINDOWS_WIDTH = 640;
@@ -164,7 +159,7 @@ void linePlotDemo(float phase_shift){
       data[i].x = ((GLfloat) i /num_points) * range-range/2.0f;
       data[i].y = 0.8f*cosf(data[i].x*3.14f+phase_shift);
     }
-  draw2DScatterPlot(data,num_points);
+  draw2DscatterPlot(data,num_points);
   dotsConnect(data,num_points);
   free(data);
 }
