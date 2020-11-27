@@ -1,14 +1,13 @@
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
 
 #endif
 
-#include <GLFW/glfw3.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
+#include <GLFW/glfw3.h>
 
 
 
@@ -174,12 +173,12 @@ void linePlotDemo(float phase_shift){
 
 
 
-int main()
+int main(void)
 {
   GLFWwindow* window;
   if (!glfwInit())
     exit(EXIT_FAILURE);
-  window = glfwCreateWindow(WINDOWS_WIDTH, WINDOWS_HEIGHT, "cHAPITRE 2 : Primitive Drawings", NULL, NULL);
+  window = glfwCreateWindow(WINDOWS_WIDTH, WINDOWS_HEIGHT, "Primitive Drawings", NULL, NULL);
 
   if(!window){
     glfwTerminate();
