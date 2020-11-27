@@ -1,1 +1,2 @@
-g++ `pkg-config --cflags glfw3 gl` -o main 2dplot.cpp `pkg-config --static --libs  glfw3 gl`
+g++ 2dplot.cpp  -lglfw3 -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo                   
+
