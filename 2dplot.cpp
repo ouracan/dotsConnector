@@ -1,9 +1,14 @@
+#ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
+
+#endif
 
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+
 
 
 
