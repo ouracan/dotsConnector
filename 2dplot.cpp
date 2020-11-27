@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <GLFW/glfw3.h>
+#include <GLUT/glut.h>
 
 
 
@@ -198,7 +199,20 @@ void linePlotDemo(float phase_shift){
 }
 
 
+void drawString(char *string)
+{
 
+    glDisable( GL_LIGHTING );
+    glColor4f(1.0f, 0.0f, 0.0f,0.9f);
+
+    glRasterPos2f(0.9f, 0.9f);
+    //void *font = GLUT_BITMAP_HELVETICA_18;
+    void *font =GLUT_BITMAP_TIMES_ROMAN_24;
+    for (char* c=string; *c != '\0'; c++) 
+    {
+        glutBitmapCharacter(font, *c); 
+    }
+}
 
 
 
@@ -265,6 +279,8 @@ int main(void)
       phase_shift+=0.02f;
       linePlotDemo(phase_shift);
       
+      //draw strings
+      drawString("Cosine wave function with phase shift");
 
 
       
