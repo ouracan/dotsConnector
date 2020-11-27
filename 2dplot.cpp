@@ -14,11 +14,16 @@
 const int WINDOWS_WIDTH = 640;
 const int WINDOWS_HEIGHT = 480;
 
-typedef struct
+struct Vertex
 {
   GLfloat x,y,z;
   GLfloat r, g, b, a;
-}Vertex;
+};
+
+struct Data
+{
+  GLfloat x,y,z;
+};
 
 void drawPoint(Vertex v1, GLfloat size){
   glPointSize(size);
@@ -51,20 +56,54 @@ void drawLineSegment(Vertex v1, Vertex v2, GLfloat width){
   glEnd();
 }
 
-void drawGrid(GLfloat width, GLfloat height, GLfloat grid_width){
+
+//draw the grid without the central axis
+
+void drawGrid(GLfloat width, GLfloat height, GLfloat interval, GLfloat line_thickness){
+
+ 
   //horizontal lines
-  for(float i =-height; i<height; i+=grid_width){
-    Vertex v1 = {-width, i, 0.0f,1.0f,1.0f,1.0f,1.0f};
-    Vertex v2 = {width, i, 0.0f,1.0f,1.0f,1.0f,1.0f};
-    drawLineSegment(v1,v2,width);
+  for(float i =-height; i<height; i+=interval){
+    if(i>=-0.05f&&i<=0.05f){
+    Vertex v1 = {-width, i, 0.0f,1.0f,1.0f,1.0f,0.0f};
+    Vertex v2 = {width, i, 0.0f,1.0f,1.0f,1.0f,0.0f};
+    drawLineSegment(v1,v2,line_thickness);
+    }else{
+      Vertex v1 = {-width, i, 0.0f,1.0f,1.0f,1.0f,0.5f};
+    Vertex v2 = {width, i, 0.0f,1.0f,1.0f,1.0f,0.5f};
+    drawLineSegment(v1,v2,line_thickness);
+    }
+
   }
   //vertical lines
-  for(float i=-width; i<width; i+=grid_width){
-    Vertex v1 = {i, -height, 0.0f,1.0f,1.0f,1.0f,1.0f};
-    Vertex v2 = {i, height, 0.0f,1.0f,1.0f,1.0f,1.0f};
-    drawLineSegment(v1,v2,width);
+  for(float i=-width; i<width; i+=interval){
+    if(i>=-0.05f&&i<=0.05f){
+    Vertex v1 = {i, -height, 0.0f,1.0f,1.0f,1.0f,0.0f};
+    Vertex v2 = {i, height, 0.0f,1.0f,1.0f,1.0f,0.0f};
+    drawLineSegment(v1,v2,line_thickness);
+    }else{
+      Vertex v1 = {i, -height, 0.0f,1.0f,1.0f,1.0f,0.5f};
+    Vertex v2 = {i, height, 0.0f,1.0f,1.0f,1.0f,0.5f};
+    drawLineSegment(v1,v2,line_thickness);
+    }
   }
+  
 }
+
+
+void drawAxis(void){
+  
+  //draw the x and y axis with the drawLineSegment function
+  Vertex v1 = {-10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f};
+  Vertex v2 = {10.f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f};
+  drawLineSegment(v1,v2, 2.0f);
+  Vertex v3 = {0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+  Vertex v4 = {0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+  drawLineSegment (v3,v4,2.0f);
+
+}
+
+
 
 
 void drawTriangle (Vertex v1, Vertex v2, Vertex v3){
@@ -89,7 +128,7 @@ void drawTriagnleDemo (){
 void drawLineDemo(){
 
   //draw a simple grid
-  drawGrid(5.0f,1.0f,0.1f);
+  drawGrid(5.0f,1.0f,0.1f,0.1f);
 
   //draw a triangle
   drawTriagnleDemo();  
@@ -108,24 +147,11 @@ void drawLineDemo(){
 }
 
 
-typedef struct
-{
-  GLfloat x,y,z;
-}Data;
+
 
 //Define a generic 2D data plotting function called "draw2DscatterPlot" with the input data stream and number of points as the input
 
 void draw2DscatterPlot(const Data *data, int num_points){
-
-  //draw the x and y axis with the drawLineSegment function
-  Vertex v1 = {-10.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-  Vertex v2 = {10.f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-  drawLineSegment(v1,v2, 2.0f);
-  v1.x = 0.0f;
-  v2.x = 0.0f;
-  v1.y = -1.0f;
-  v2.y = 1.0f;
-  drawLineSegment (v1,v2,2.0f);
 
   //draw the data points one by one with the drawPoint function
   for (int i =0 ; i<num_points; i++){
@@ -135,6 +161,9 @@ void draw2DscatterPlot(const Data *data, int num_points){
     drawPoint(v,8.0f);
   }
 }
+
+
+
 
 //create a similar function called dotsConnect to connect the dots together with the line segments, so the curve and the points and displayed together
 
@@ -154,7 +183,7 @@ void dotsConnect(const Data *data, int num_points){
 //integrate everything into a full demo by creating the grid, generate the simulated data points using a cosine function and connect the points with lines
 
 void linePlotDemo(float phase_shift){
-  drawGrid(5.0f, 1.0f, 0.1f);
+
   GLfloat range = 10.0f;
   const int num_points = 200;
   Data *data =(Data*)malloc(sizeof(Data)*num_points);
@@ -223,6 +252,14 @@ int main(void)
       //drawPointsDemo(width, height);
 
       //call drawLineDemo function
+
+
+
+      //draw
+      drawAxis();
+
+      //draw grid
+      drawGrid(10.0f, 1.0f, 0.1f,0.1f);
 
       //drawLineDemo();
       phase_shift+=0.02f;
